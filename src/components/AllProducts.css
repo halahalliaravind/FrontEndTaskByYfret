@@ -46,22 +46,24 @@
   height: 14px;
 } */
 
-/* .add-to,
+.add-to,
 .remove-to {
   position: absolute;
   top: 0;
   left: 16px;
   height: 35px;
   width: 30px;
-  background: rgba(255, 255, 255, 0.32);
-  color: white;
+  /* background: rgba(255, 255, 255, 0.32); */
+  color: #ffffff;
   padding-top: 2%;
   font-weight: bold;
   display: flex;
   justify-content: center;
-} */
+  background-color: #F8A300;
+  cursor: pointer;
+}
 
-/* .add-to::after,
+.add-to::after,
 .remove-to::after {
   content: "";
   position: absolute;
@@ -72,7 +74,7 @@
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
   bottom: 0;
-} */
+}
 
 /* .check-icon {
   position: absolute;
@@ -107,4 +109,7 @@
 
 .movie-card-container img {
   width: 100%;
+}
+a{
+  text-decoration: none;
 }

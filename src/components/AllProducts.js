@@ -3,7 +3,11 @@ import "./AllProducts.css";
 import * as d3 from "d3";
 import data from "../data.csv";
 
-import Pagination from './Paginantion'
+import ProductCard from "./ProdCard";
+import Pagination from "./Pagination";
+
+import Cart from "../pages/Cart";
+
 
 class Home extends Component {
   constructor(props) {
@@ -11,11 +15,13 @@ class Home extends Component {
 
     this.state = {
       datacsv: [],
+      cart: [],
     };
-    
+
     this.onChangePage = this.onChangePage.bind(this);
   }
 
+  //Getting Data from local file
   componentDidMount() {
     d3.csv(data)
       .then((data) => {
@@ -28,44 +34,72 @@ class Home extends Component {
   }
 
   onChangePage(datacsv) {
-    // update state with new page of items
     this.setState({ datacsv: datacsv });
   }
+
+
+  //Add to Cart
+  handleAddFunc(product) {
+    const existingProduct = this.state.cart.filter((p) => p.id === product.id);
+
+    if (existingProduct.length > 0) {
+      const withoutExistingProduct = this.state.cart.filter(
+        (p) => p.id !== product.id
+      );
+      const updatedUnitsProduct = {
+        ...existingProduct[0],
+        units: existingProduct[0].units + product.units,
+      };
+
+      this.setState({
+        cart: [...withoutExistingProduct, updatedUnitsProduct],
+      });
+    } else {
+      this.setState({
+        cart: [...this.state.cart, product],
+      });
+    }
+  }
+
+
 
   render() {
     return (
       <div style={{ marginTop: "80px" }}>
+          
+        {
+          this.state.cart.map((addedEle)=>(
+            <Cart
+                key={addedEle.id}
+                {...addedEle}
+                addFunc={this.handleAddFunc.bind(this)}
+              />
+          ))
+        }
+        {/* {
+          <ul>
+            {this.state.cart.map((c) => (
+              <li>
+                {c.name} | units {c.units}
+              </li>
+            ))}
+          </ul>
+        } */}
         <div className="container">
-          {/* <div className="text-center">
-            <h1>All the Products</h1> */}
           <div className="elements">
-            {this.state.datacsv.map((item) => (
-              <div className="movie-card-container" key={item.id}>
-                <img className="poster" src={item.image} alt="movie poster" />
-                <div
-                  className="movie-title"
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <div>{item.brand}</div>
-                  <div>{item.business_unit}</div>
-                </div>
-                <div className="movie-details">{item.description}</div>
-                <div
-                  className="movie-title"
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <div>{item.category}</div>
-                  <div>{item.price}</div>
-                </div>
-              </div>
+            {this.state.datacsv.slice(0, 10).map((item) => (
+              <ProductCard
+                key={item.id}
+                {...item}
+                addFunc={this.handleAddFunc.bind(this)}
+              />
             ))}
           </div>
 
           <Pagination
-              items={this.state.datacsv}
-              onChangePage={this.onChangePage}
-            />
-          {/* </div> */}
+            items={this.state.datacsv}
+            onChangePage={this.onChangePage}
+          />
         </div>
         <hr />
         <div className="credits text-center">
@@ -74,12 +108,12 @@ class Home extends Component {
               href="http://jasonwatmore.com/post/2017/03/14/react-pagination-example-with-logic-like-google"
               target="_top"
             >
-              React - Pagination Example with Logic like Google
+              Please Contact Us for your any of the Query
             </a>
           </p>
           <p>
             <a href="http://jasonwatmore.com" target="_top">
-              JasonWatmore.com
+              aravindhalahalli.81@gmail.com
             </a>
           </p>
         </div>
